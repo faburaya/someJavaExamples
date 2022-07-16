@@ -14,9 +14,11 @@ class FileExplorerTest {
 
     @Test
     void listFiles_flat_hierarchy() throws IOException {
-        FileSystemTestNode testDirectory = new TestDirectory(testDirName).with(
-                List.of(new TestFile("1"), new TestFile("2"))
-        ).create();
+        FileSystemTestNode testDirectory =
+                new TestDirectory(testDirName).with(
+                    List.of(new TestFile("1"), new TestFile("2"))
+                );
+        testDirectory.create();
 
         try
         {
@@ -40,13 +42,15 @@ class FileExplorerTest {
 
     @Test
     void listFiles_two_levels() throws IOException {
-        FileSystemTestNode testDirectory = new TestDirectory(testDirName).with(
-                List.of(new TestFile("1"),
-                        new TestFile("2"),
-                        new TestDirectory("sub").with(
-                                List.of(new TestFile("3"),
-                                        new TestFile("4"))))
-        ).create();
+        FileSystemTestNode testDirectory =
+                new TestDirectory(testDirName).with(
+                    List.of(new TestFile("1"),
+                            new TestFile("2"),
+                            new TestDirectory("sub").with(
+                                    List.of(new TestFile("3"),
+                                            new TestFile("4"))))
+                );
+        testDirectory.create();
 
         try
         {

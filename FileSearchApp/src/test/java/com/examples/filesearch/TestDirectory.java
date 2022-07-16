@@ -8,10 +8,6 @@ import java.util.List;
 class TestDirectory extends FileSystemTestNode {
     private final List<FileSystemTestNode> childNodes;
 
-    protected List<FileSystemTestNode> getChildNodes() {
-        return childNodes;
-    }
-
     public TestDirectory(String name) {
         super(name, null);
         childNodes = new ArrayList<>();
@@ -26,12 +22,11 @@ class TestDirectory extends FileSystemTestNode {
         return this;
     }
 
-    public FileSystemTestNode create() throws IOException {
+    public void create() throws IOException {
         Files.createDirectory(getPath());
         for (FileSystemTestNode node : childNodes) {
             node.create();
         }
-        return this;
     }
 
     public void delete() throws IOException {

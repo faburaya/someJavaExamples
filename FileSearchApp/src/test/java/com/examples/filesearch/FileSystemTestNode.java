@@ -3,14 +3,9 @@ package com.examples.filesearch;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
 
 abstract class FileSystemTestNode {
     private final String name;
-
-    public String getName() {
-        return name;
-    }
 
     private FileSystemTestNode parent;
 
@@ -25,8 +20,6 @@ abstract class FileSystemTestNode {
         this.parent = parent;
     }
 
-    protected abstract List<FileSystemTestNode> getChildNodes();
-
     public Path getPath() {
         if (parent != null) {
             return parent.getPath().resolve(name);
@@ -34,7 +27,7 @@ abstract class FileSystemTestNode {
         return Paths.get(name);
     }
 
-    public abstract FileSystemTestNode create() throws IOException;
+    public abstract void create() throws IOException;
 
     public abstract void delete() throws IOException;
 }
