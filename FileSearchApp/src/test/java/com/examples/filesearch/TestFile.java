@@ -5,7 +5,7 @@ import java.nio.file.Files;
 import java.util.Collections;
 import java.util.List;
 
-public class TestFile extends FileSystemTestNode {
+class TestFile extends FileSystemTestNode {
     public TestFile(String name) {
         super(name, null);
     }

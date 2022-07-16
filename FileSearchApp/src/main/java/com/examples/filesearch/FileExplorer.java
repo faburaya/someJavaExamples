@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * @brief Implementiert das Auflisten von Dateien.
  */
-public class FileExplorer implements FileExplorerInterface {
+class FileExplorer implements FileExplorerInterface {
     @Override
     public List<Path> listFiles(Path directoryPath) throws IOException {
         return Files.walk(directoryPath)
