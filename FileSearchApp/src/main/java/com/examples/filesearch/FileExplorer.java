@@ -11,7 +11,7 @@ import java.util.List;
 public class FileExplorer implements FileExplorerInterface {
     @Override
     public List<Path> listFiles(Path directoryPath) throws IOException {
-        return Files.list(directoryPath)
+        return Files.walk(directoryPath)
                 .filter(path -> Files.isRegularFile(path))
                 .toList();
     }
