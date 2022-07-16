@@ -9,10 +9,10 @@ import java.util.List;
  */
 public interface FileExplorerInterface {
     /**
-     * @brief Listet die Dateien auf.
      * @param directoryPath Der Pfad des Ordners, deren Dateien aufgelistet werden müssen.
      * @return Eine Liste mit allen Dateien, die unmittelbar unter dem gegebenen Ordner stehen.
      * @throws IOException
+     * @brief Listet die Dateien auf.
      */
-    List<Path> ListFiles(Path directoryPath) throws IOException;
+    List<Path> listFiles(Path directoryPath) throws IOException;
 }
