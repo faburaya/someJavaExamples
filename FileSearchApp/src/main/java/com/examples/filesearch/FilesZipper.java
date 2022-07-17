@@ -9,19 +9,18 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 /**
- * @brief Implementiert <code>FilesPackagerInterface</code>,
- *        indem das Paket eine Zip-Datei ist.
+ * Implementiert <code>FilesPackagerInterface</code>, indem sie Zip-Dateien erstellt.
  * @see com.examples.filesearch.FilesPackagerInterface
  */
 class FilesZipper implements FilesPackagerInterface, AutoCloseable {
-    private Path basePath;
-    private ZipOutputStream zipOutStream;
+    private final Path basePath;
+    private final ZipOutputStream zipOutStream;
 
     /**
-     * @brief Erstellt eine neue Instanz von <code>FilesZipper</code>.
+     * Erstellt eine neue Instanz von <code>FilesZipper</code>.
      * @param basePath Der oberste Pfad, auf den alle im Paket hinzufügende Dateien sich beziehen.
      * @param filePath Der Pfad der zu erzeugenden Zip-Datei.
-     * @throws FileNotFoundException
+     * @throws FileNotFoundException Falls der gegebene Dateipfad nicht gültig ist.
      */
     public FilesZipper(Path basePath, Path filePath) throws FileNotFoundException {
         this.basePath = basePath;

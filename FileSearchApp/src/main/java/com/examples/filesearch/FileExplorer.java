@@ -4,15 +4,17 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.stream.Stream;
 
 /**
- * @brief Implementiert das Auflisten von Dateien.
+ * Implementiert <code>FileExplorerInterface</code>, indem sie Dateien auflistet.
+ * @see com.examples.filesearch.FileExplorerInterface
  */
 class FileExplorer implements FileExplorerInterface {
     @Override
     public List<Path> listFiles(Path directoryPath) throws IOException {
-        return Files.walk(directoryPath)
-                .filter(path -> Files.isRegularFile(path))
-                .toList();
+        try (Stream<Path> stream = Files.walk(directoryPath)) {
+            return stream.filter(Files::isRegularFile).toList();
+        }
     }
 }
