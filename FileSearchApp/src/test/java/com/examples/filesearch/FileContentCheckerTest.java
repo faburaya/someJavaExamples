@@ -24,8 +24,8 @@ class FileContentCheckerTest {
     @Test
     void hasMatch_singleLine() throws IOException {
         FileContentChecker checker = new FileContentChecker("\\w+\\d+");
-        assertFalse(checker.HasMatch(createTextFileWith("Keine Übereinstimmung")));
-        assertTrue(checker.HasMatch(createTextFileWith("Die Übereinstimmung1.")));
+        assertFalse(checker.hasMatch(createTextFileWith("Keine Übereinstimmung")));
+        assertTrue(checker.hasMatch(createTextFileWith("Die Übereinstimmung1.")));
     }
     
     @Test
@@ -35,6 +35,6 @@ class FileContentCheckerTest {
         textContent.append("Die Nummer\n");
         textContent.append("ist 696\n");
         textContent.append("oder?");
-        assertTrue(checker.HasMatch(createTextFileWith(textContent)));
+        assertTrue(checker.hasMatch(createTextFileWith(textContent)));
     }
 }

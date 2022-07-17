@@ -6,11 +6,11 @@ import java.nio.file.Path;
 /**
  * Schnittstelle zur Erzeugung von Paketen.
  */
-public interface FilesPackagerInterface {
+public interface FilePackagerInterface {
     /**
      * Fügt dem zu erzeugende Paket eine Datei hinzu.
      * @param filePath Der Pfad der hinzufügenden Datei.
      * @throws IOException Falls ein Fehler während des Zugriffs auf das Dateisystem auftritt.
      */
-    void AddFileToPackage(Path filePath) throws IOException;
+    void addFileToPackage(Path filePath) throws IOException;
 }

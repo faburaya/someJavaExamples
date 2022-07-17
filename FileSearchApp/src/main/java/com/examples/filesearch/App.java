@@ -9,7 +9,7 @@ import java.util.List;
 public class App {
     private final FileExplorerInterface fileExplorer;
     private final FileContentCheckerInterface contentChecker;
-    private final FilesPackagerInterface packager;
+    private final FilePackagerInterface packager;
 
     /**
      * Erstellt eine neue Instanz dieser Anwendung.
@@ -19,7 +19,7 @@ public class App {
      */
     public App(FileExplorerInterface fileExplorer,
                FileContentCheckerInterface contentChecker,
-               FilesPackagerInterface packager) {
+               FilePackagerInterface packager) {
         this.fileExplorer = fileExplorer;
         this.contentChecker = contentChecker;
         this.packager = packager;
@@ -28,7 +28,7 @@ public class App {
     /**
      * Sucht nach Dateien, deren Inhalt wenigstens eine Übereinstimmung mit
      * einem bestimmten Muster aufweist, und verpackt sie in einer Zip-Datei.
-     * 
+     *
      * @param inputDirPath Der Pfad des Ordners, wo die zu suchenden Dateien sich befinden.
      * @return Die Anzahl von Dateien die im Paket hinzugefügt wurden.
      *         Null bedeutet, dass der Inhalt von keiner Datei mit dem Muster übereinstimmte
@@ -38,8 +38,8 @@ public class App {
         int fileCount = 0;
         List<Path> files = fileExplorer.listFiles(inputDirPath);
         for (Path filePath : files) {
-            if (contentChecker.HasMatch(filePath)) {
-                packager.AddFileToPackage(filePath);
+            if (contentChecker.hasMatch(filePath)) {
+                packager.addFileToPackage(filePath);
                 ++fileCount;
             }
         }
@@ -69,7 +69,7 @@ public class App {
             return;
         }
 
-        try (FilesZipper zipper = new FilesZipper(inputDirPath, outputZipPath))
+        try (FileZipper zipper = new FileZipper(inputDirPath, outputZipPath))
         {
             App application = new App(new FileExplorer(), new FileContentChecker(regularExpression), zipper);
             int matchingFilesCount = application.SearchAndPackageMatchingFiles(inputDirPath);

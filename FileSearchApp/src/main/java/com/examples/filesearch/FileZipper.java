@@ -9,20 +9,20 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 /**
- * Implementiert <code>FilesPackagerInterface</code>, indem sie Zip-Dateien erstellt.
- * @see com.examples.filesearch.FilesPackagerInterface
+ * Implementiert <code>FilePackagerInterface</code>, indem sie Zip-Dateien erstellt.
+ * @see FilePackagerInterface
  */
-class FilesZipper implements FilesPackagerInterface, AutoCloseable {
+class FileZipper implements FilePackagerInterface, AutoCloseable {
     private final Path basePath;
     private final ZipOutputStream zipOutStream;
 
     /**
-     * Erstellt eine neue Instanz von <code>FilesZipper</code>.
+     * Erstellt eine neue Instanz von <code>FileZipper</code>.
      * @param basePath Der oberste Pfad, auf den alle im Paket hinzufügende Dateien sich beziehen.
      * @param filePath Der Pfad der zu erzeugenden Zip-Datei.
      * @throws FileNotFoundException Falls der gegebene Dateipfad nicht gültig ist.
      */
-    public FilesZipper(Path basePath, Path filePath) throws FileNotFoundException {
+    public FileZipper(Path basePath, Path filePath) throws FileNotFoundException {
         this.basePath = basePath;
         zipOutStream = new ZipOutputStream(new FileOutputStream(filePath.toString()));
     }
@@ -33,7 +33,7 @@ class FilesZipper implements FilesPackagerInterface, AutoCloseable {
     }
 
     @Override
-    public void AddFileToPackage(Path filePath) throws IOException {
+    public void addFileToPackage(Path filePath) throws IOException {
         Path relativePath = filePath.relativize(basePath);
         ZipEntry zipEntry = new ZipEntry(relativePath.toString());
         zipEntry.setTime(filePath.toFile().lastModified());

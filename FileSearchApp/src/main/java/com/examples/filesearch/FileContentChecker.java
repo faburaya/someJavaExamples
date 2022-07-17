@@ -28,7 +28,7 @@ class FileContentChecker implements FileContentCheckerInterface {
     }
 
     @Override
-    public boolean HasMatch(Path filePath) throws IOException {
+    public boolean hasMatch(Path filePath) throws IOException {
         if (Files.probeContentType(filePath).startsWith("text")) {
             try (Stream<String> stream = Files.lines(filePath, StandardCharsets.UTF_8)) {
                 return stream.anyMatch(line -> pattern.matcher(line).find());
