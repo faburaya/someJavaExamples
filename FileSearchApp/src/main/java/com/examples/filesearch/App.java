@@ -47,7 +47,7 @@ public class App {
     }
 
     public static void main(String[] args) {
-        if (args.length < 1 || args.length > 3) {
+        if (args.length != 3) {
             System.out.println("Falsche Argumente!");
             System.out.println("Nutzung: regex [Eingabe] [Ausgabe]");
             System.out.println("Eingabe = Pfad des Ordners mit den zu suchenden Dateien.");
@@ -57,20 +57,23 @@ public class App {
 
         final String regularExpression = args[0];
 
-        final Path inputDirPath = Paths.get(args.length >= 2 ? args[1] : ".");
+        final Path inputDirPath = Paths.get(args[1]);
         if (!Files.isDirectory(inputDirPath)) {
             System.out.println("Fehler: '" + inputDirPath + "' ist kein Ordner!");
             return;
         }
 
-        final Path outputZipPath = Paths.get(args.length >= 3 ? args[2] : "Ergebnis.zip");
+        final Path outputZipPath = Paths.get(args[2]);
         if (Files.exists(outputZipPath)) {
-            System.out.println("Fehler: die Datei '" + outputZipPath + "' existiert bereits!");
-            return;
+            try {
+                Files.delete(outputZipPath);
+            }
+            catch (IOException ex) {
+                ex.printStackTrace();
+            }
         }
 
-        try (FileZipper zipper = new FileZipper(inputDirPath, outputZipPath))
-        {
+        try (FileZipper zipper = new FileZipper(inputDirPath, outputZipPath)) {
             App application = new App(new FileExplorer(), new FileContentChecker(regularExpression), zipper);
             int matchingFilesCount = application.SearchAndPackageMatchingFiles(inputDirPath);
             System.out.println("Der Inhalt von " + matchingFilesCount + " Datei(en) wies Überstimmung mit dem Muster auf.");

@@ -34,7 +34,7 @@ class FileZipper implements FilePackagerInterface, AutoCloseable {
 
     @Override
     public void addFileToPackage(Path filePath) throws IOException {
-        Path relativePath = filePath.relativize(basePath);
+        Path relativePath = basePath.relativize(filePath);
         ZipEntry zipEntry = new ZipEntry(relativePath.toString());
         zipEntry.setTime(filePath.toFile().lastModified());
         zipOutStream.putNextEntry(zipEntry);
