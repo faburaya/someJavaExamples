@@ -76,7 +76,7 @@ public class App {
         try (FileZipper zipper = new FileZipper(inputDirPath, outputZipPath)) {
             App application = new App(new FileExplorer(), new FileContentChecker(regularExpression), zipper);
             int matchingFilesCount = application.SearchAndPackageMatchingFiles(inputDirPath);
-            System.out.println("Der Inhalt von " + matchingFilesCount + " Datei(en) wies Überstimmung mit dem Muster auf.");
+            System.out.println("Der Inhalt von " + matchingFilesCount + " Datei(en) wies(es) Überstimmung mit dem Muster auf.");
         }
         catch (IOException ex) {
             ex.printStackTrace();
