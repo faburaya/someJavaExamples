@@ -1,9 +1,9 @@
 package com.examples.jdbctest;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.Properties;
 
 /**
@@ -44,14 +44,14 @@ class AppProperties {
     /**
      * Ladet die Einstellungen aus einer *.properties Datei.
      * 
-     * @param filePath Der Pfad der zu ladenden Datei.
+     * @param file Die zu ladende Datei.
      * @return Eine Instanz von <code>AppProperties</code>.
      * @throws FileNotFoundException Wenn die gegeben Datei nicht zu finden ist.
      * @throws IOException           Wenn nicht alle notwendigen Einstellungen
      *                               geladen werden können.
      */
-    public static AppProperties loadFrom(Path filePath) throws FileNotFoundException, IOException {
-        try (FileInputStream inputStream = new FileInputStream(filePath.toFile())) {
+    public static AppProperties loadFrom(File file) throws FileNotFoundException, IOException {
+        try (FileInputStream inputStream = new FileInputStream(file)) {
             Properties properties = new Properties();
             properties.load(inputStream);
             String databaseUrl = properties.getProperty(PROPKEY_DB_URL);
