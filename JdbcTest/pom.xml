@@ -28,6 +28,12 @@
       <artifactId>sqlite-jdbc</artifactId>
       <version>3.36.0.3</version>
     </dependency>
+    <dependency>
+      <!-- https://mvnrepository.com/artifact/org.apache.derby/derby -->
+      <groupId>org.apache.derby</groupId>
+      <artifactId>derby</artifactId>
+      <version>10.14.2.0</version>
+    </dependency>
   </dependencies>
 
   <build>
