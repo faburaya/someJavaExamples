@@ -24,18 +24,19 @@ public class SqliteConnectionProviderTest {
     public void getConnection_and_use_it() throws SQLException {
         String dbFilePath = getDatabaseFile().getAbsolutePath();
         DbConnectionProviderInterface provider = new SqliteConnectionProvider(dbFilePath);
-        Connection conn = provider.getConnection();
-        assertNotNull(conn);
-        String query = String.format("select * from %s;", SQLITE_DB_SINGLE_TABLE_NAME);
-        Statement statement = conn.createStatement();
-        ResultSet rowSet = statement.executeQuery(query);
-        String actualRowValue = null;
-        int actualRowCount = 0;
-        while (rowSet.next()) {
-            actualRowValue = rowSet.getString(SQLITE_DB_TABLE_COLUMN_NAME);
-            ++actualRowCount;
+        try (Connection conn = provider.getConnection()) {
+            assertNotNull(conn);
+            String query = String.format("select * from %s;", SQLITE_DB_SINGLE_TABLE_NAME);
+            Statement statement = conn.createStatement();
+            ResultSet rowSet = statement.executeQuery(query);
+            String actualRowValue = null;
+            int actualRowCount = 0;
+            while (rowSet.next()) {
+                actualRowValue = rowSet.getString(SQLITE_DB_TABLE_COLUMN_NAME);
+                ++actualRowCount;
+            }
+            assertEquals(1, actualRowCount);
+            assertEquals("test_row", actualRowValue);
         }
-        assertEquals(1, actualRowCount);
-        assertEquals("test_row", actualRowValue);
     }
 }

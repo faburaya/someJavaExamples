@@ -2,6 +2,7 @@ package com.examples.jdbctest;
 
 import java.nio.file.Paths;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
 
 import org.apache.derby.jdbc.EmbeddedDataSource;
@@ -12,32 +13,46 @@ import org.apache.derby.jdbc.EmbeddedDataSource;
  * 
  * @see DbConnectionProviderInterface
  */
-class DerbyConnectionProvider implements DbConnectionProviderInterface {
-    private final String databaseName;
+class DerbyConnectionProvider implements DbConnectionProviderInterface, AutoCloseable {
+    private final String dbFilePath;
     private final String user;
     private final String password;
 
     /**
      * Erstellt eine neue Instanz von <code>DerbyConnectionProvider</code>.
      * 
-     * @param databaseName Der Pfad der Datei, welche die Datenbank enthält. Wenn
-     *                     sie nicht vorhanden ist, wird sie geschaffen.
-     * @param user         Der Name des Benutzers der Datenbank.
-     * @param password     Das Kennwordt des gegebenen Benutzers.
+     * @param dbFilePath Der Pfad der Datei, welche die Datenbank enthält. Wenn
+     *                   sie nicht vorhanden ist, wird sie geschaffen.
+     * @param user       Der Name des Benutzers der Datenbank.
+     * @param password   Das Kennwordt des gegebenen Benutzers.
      */
     public DerbyConnectionProvider(String dbFilePath, String user, String password) {
-        String reformattedFilePath = Paths.get(dbFilePath).toAbsolutePath().toString().replace('\\', '/');
-        databaseName = String.format("%s;create=true", reformattedFilePath);
+        this.dbFilePath = dbFilePath;
         this.user = user;
         this.password = password;
+    }
+
+    private static String reformatFilePath(String dbFilePath) {
+        return Paths.get(dbFilePath).toAbsolutePath().toString().replace('\\', '/');
     }
 
     @Override
     public Connection getConnection() throws SQLException {
         EmbeddedDataSource dataSource = new EmbeddedDataSource();
-        dataSource.setDatabaseName(databaseName);
+        dataSource.setDatabaseName(String.format("%s;create=true", reformatFilePath(dbFilePath)));
         dataSource.setUser(user);
         dataSource.setPassword(password);
         return dataSource.getConnection();
+    }
+
+    @Override
+    public void close() {
+        try {
+            DriverManager.getConnection(String.format("jdbc:derby:%s;shutdown=true", reformatFilePath(dbFilePath)));
+        } catch (SQLException sqlex) {
+            if (sqlex.getErrorCode() != 45000 && sqlex.getErrorCode() != 50000) {
+                sqlex.printStackTrace();
+            }
+        }
     }
 }
