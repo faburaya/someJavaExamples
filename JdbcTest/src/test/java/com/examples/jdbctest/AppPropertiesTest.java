@@ -16,8 +16,8 @@ public class AppPropertiesTest {
     @Test
     public void testLoadFrom() throws FileNotFoundException, IOException {
         AppProperties appProperties = AppProperties.loadFrom(getPropertiesFile());
-        assertEquals("jdbc:sqlite:testdb.data", appProperties.getDatabaseUrl());
-        assertEquals("any_user", appProperties.getDatabaseUser());
-        assertEquals("no_password", appProperties.getDatabasePassword());
+        assertEquals("the_url", appProperties.getDatabaseUrl());
+        assertEquals("some_user", appProperties.getDatabaseUser());
+        assertEquals("her_password", appProperties.getDatabasePassword());
     }
 }
