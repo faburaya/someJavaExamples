@@ -15,12 +15,20 @@ class AppProperties {
 
     private static final String PROPKEY_DB_USER = "dbUser";
 
-    private static final String PROPKEY_DB_URL = "dbUrl";
+    private static final String PROPKEY_DB_SOURCE = "dbSource";
 
-    private final String databaseUrl;
+    private static final String PROPKEY_DB_PROVIDER = "dbProvider";
 
-    public String getDatabaseUrl() {
-        return databaseUrl;
+    private final String databaseProvider;
+
+    public String getDatabaseProvider() {
+        return databaseProvider;
+    }
+
+    private final String databaseSource;
+
+    public String getDatabaseSource() {
+        return databaseSource;
     }
 
     private final String databaseUser;
@@ -35,8 +43,10 @@ class AppProperties {
         return databasePassword;
     }
 
-    private AppProperties(String databaseUrl, String databaseUser, String databasePassword) {
-        this.databaseUrl = databaseUrl;
+    private AppProperties(String databaseProvider, String databaseSource, String databaseUser,
+            String databasePassword) {
+        this.databaseProvider = databaseProvider;
+        this.databaseSource = databaseSource;
         this.databaseUser = databaseUser;
         this.databasePassword = databasePassword;
     }
@@ -54,10 +64,11 @@ class AppProperties {
         try (FileInputStream inputStream = new FileInputStream(file)) {
             Properties properties = new Properties();
             properties.load(inputStream);
-            String databaseUrl = properties.getProperty(PROPKEY_DB_URL);
+            String databaseProvider = properties.getProperty(PROPKEY_DB_PROVIDER);
+            String databaseSource = properties.getProperty(PROPKEY_DB_SOURCE);
             String databaseUser = properties.getProperty(PROPKEY_DB_USER);
             String databasePassword = properties.getProperty(PROPKEY_DB_PASSWORD);
-            return new AppProperties(databaseUrl, databaseUser, databasePassword);
+            return new AppProperties(databaseProvider, databaseSource, databaseUser, databasePassword);
         }
     }
 }

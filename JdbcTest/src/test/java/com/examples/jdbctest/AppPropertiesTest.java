@@ -16,7 +16,8 @@ public class AppPropertiesTest {
     @Test
     public void testLoadFrom() throws FileNotFoundException, IOException {
         AppProperties appProperties = AppProperties.loadFrom(getPropertiesFile());
-        assertEquals("the_url", appProperties.getDatabaseUrl());
+        assertEquals("database_product", appProperties.getDatabaseProvider());
+        assertEquals("the_source", appProperties.getDatabaseSource());
         assertEquals("some_user", appProperties.getDatabaseUser());
         assertEquals("her_password", appProperties.getDatabasePassword());
     }
