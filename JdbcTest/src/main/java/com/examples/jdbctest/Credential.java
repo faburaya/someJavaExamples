@@ -6,7 +6,7 @@ import java.util.Arrays;
 class Credential implements Closeable {
     private final String userId;
 
-    public String getUser() {
+    public String getUserId() {
         return userId;
     }
 

@@ -135,7 +135,7 @@ class CredentialFetcher implements CredentialFetcherInterface {
         Credential credential = fallbackFetcher.getCredential();
         try {
             SecretKey secret = createSecret();
-            String encodedUserId = encrypt(credential.getUser().toCharArray(), secret);
+            String encodedUserId = encrypt(credential.getUserId().toCharArray(), secret);
             String encodedPassword = encrypt(credential.getPassword(), secret);
             saveEncodedCredential(encodedUserId, encodedPassword);
             saveSecret(secret);
