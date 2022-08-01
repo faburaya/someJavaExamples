@@ -19,6 +19,8 @@ import java.time.ZoneId;
 import java.util.Base64;
 import java.util.List;
 
+import java.util.logging.Logger;
+
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
@@ -31,6 +33,12 @@ import javax.crypto.spec.SecretKeySpec;
  * Gewährt den Zugriff auf das durch Verschlüsselung geschützte Kennwort.
  */
 class CredentialFetcher implements CredentialFetcherInterface {
+    private static final Logger logger;
+
+    static {
+        logger = Logger.getLogger(CredentialFetcher.class.getCanonicalName());
+    }
+
     private final Path credentialFilePath;
     private final Path secretFilePath;
     private final CredentialFetcherInterface fallbackFetcher;
@@ -61,16 +69,20 @@ class CredentialFetcher implements CredentialFetcherInterface {
         return keyGenerator.generateKey();
     }
 
-    private void saveSecret(SecretKey secret) throws IOException {
+    private void saveSecret(SecretKey secret) throws AppSecurityException {
         try (FileOutputStream outputStream = new FileOutputStream(secretFilePath.toFile())) {
             outputStream.write(secret.getEncoded());
+        } catch (IOException ex) {
+            throw new AppSecurityException("Fehler bei dem Schreiben der Datei mit dem Geheimnis!");
         }
     }
 
-    private SecretKey readSecret() throws IOException {
+    private SecretKey readSecret() throws AppSecurityException {
         try (FileInputStream inputStream = new FileInputStream(secretFilePath.toFile())) {
             byte[] bytes = inputStream.readAllBytes();
             return new SecretKeySpec(bytes, ENCRIPTION_ALGORITHM);
+        } catch (IOException ex) {
+            throw new AppSecurityException("Fehler bei dem Lesen der Datei mit dem Geheimnis!");
         }
     }
 
@@ -85,13 +97,15 @@ class CredentialFetcher implements CredentialFetcherInterface {
     }
 
     private void saveEncodedCredential(String encodedUserId, String encodedPassword)
-            throws IOException, AppSecurityException {
+            throws AppSecurityException {
         try (FileWriter writer = new FileWriter(credentialFilePath.toFile())) {
             writer.append(encodedUserId);
             writer.append(System.lineSeparator());
             writer.append(encodedPassword);
         } catch (FileNotFoundException ex) {
             throw new AppSecurityException("Datei mit den Anmeldeinformationen kann nicht gefuden werden!");
+        } catch (IOException ex) {
+            throw new AppSecurityException("Fehler bei dem Schreiben der Datei mit den Anmeldeinformationen!");
         }
     }
 
@@ -129,7 +143,7 @@ class CredentialFetcher implements CredentialFetcherInterface {
             SecretKey secret = readSecret();
             return readCredentialFromFile(secret);
         } catch (Exception ex) {
-            System.out.println(ex.getMessage());
+            logger.warning(ex.getMessage());
         }
 
         Credential credential = fallbackFetcher.getCredential();

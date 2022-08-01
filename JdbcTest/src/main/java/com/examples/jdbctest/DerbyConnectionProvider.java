@@ -4,6 +4,7 @@ import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.logging.Logger;
 
 import org.apache.derby.jdbc.EmbeddedDataSource;
 
@@ -14,6 +15,12 @@ import org.apache.derby.jdbc.EmbeddedDataSource;
  * @see DbConnectionProviderInterface
  */
 class DerbyConnectionProvider implements DbConnectionProviderInterface, AutoCloseable {
+    private static final Logger logger;
+
+    static {
+        logger = Logger.getLogger(DerbyConnectionProvider.class.getCanonicalName());
+    }
+
     private final String dbFilePath;
     private final String user;
     private final String password;
@@ -51,7 +58,7 @@ class DerbyConnectionProvider implements DbConnectionProviderInterface, AutoClos
             DriverManager.getConnection(String.format("jdbc:derby:%s;shutdown=true", reformatFilePath(dbFilePath)));
         } catch (SQLException sqlex) {
             if (sqlex.getErrorCode() != 45000 && sqlex.getErrorCode() != 50000) {
-                sqlex.printStackTrace();
+                logger.severe(sqlex.getMessage());
             }
         }
     }
