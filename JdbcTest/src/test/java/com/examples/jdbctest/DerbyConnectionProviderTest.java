@@ -9,13 +9,14 @@ import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 
 public class DerbyConnectionProviderTest {
-    private final String DERBY_DATABASE_FILE_PATH = Paths.get("temp", "derby_database").toString();
-    private final String DERBY_DATABASE_USER = "Kerl";
-    private final String DERBY_DATABASE_PASSOWRD = "K3nnwort";
+    private static final String DERBY_DATABASE_FILE_PATH = Paths.get("temp", "derby_database").toString();
+    private static final String DERBY_DATABASE_USER = "Kerl";
+    private static final char[] DERBY_DATABASE_PASSOWRD = "K3nnwort".toCharArray();
 
     private static void deletePath(Path path) throws IOException {
         if (!Files.exists(path))
@@ -41,7 +42,12 @@ public class DerbyConnectionProviderTest {
     }
 
     @Before
-    public void cleanDatabaseFiles() throws IOException {
+    public void setUp() throws IOException {
+        deletePath(Paths.get(DERBY_DATABASE_FILE_PATH));
+    }
+
+    @AfterClass
+    public static void tearDown() throws IOException {
         deletePath(Paths.get(DERBY_DATABASE_FILE_PATH));
     }
 

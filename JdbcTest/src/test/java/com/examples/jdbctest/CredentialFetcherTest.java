@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -24,10 +25,19 @@ public class CredentialFetcherTest {
         };
     }
 
-    @Before
-    public void cleanUp() throws IOException {
+    public static void cleanUp() throws IOException {
         Files.deleteIfExists(Paths.get(TEST_CRED_FILE_PATH));
         Files.deleteIfExists(Paths.get(TEST_SECRET_FILE_PATH));
+    }
+
+    @Before
+    public void setUp() throws IOException {
+        cleanUp();
+    }
+
+    @AfterClass
+    public static void tearDown() throws IOException {
+        cleanUp();
     }
 
     @Test

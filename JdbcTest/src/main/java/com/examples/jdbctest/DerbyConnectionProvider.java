@@ -1,5 +1,7 @@
 package com.examples.jdbctest;
 
+import java.nio.CharBuffer;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -23,7 +25,7 @@ class DerbyConnectionProvider implements DbConnectionProviderInterface, AutoClos
 
     private final String dbFilePath;
     private final String user;
-    private final String password;
+    private final char[] password;
 
     /**
      * Erstellt eine neue Instanz von <code>DerbyConnectionProvider</code>.
@@ -33,7 +35,7 @@ class DerbyConnectionProvider implements DbConnectionProviderInterface, AutoClos
      * @param user       Der Name des Benutzers der Datenbank.
      * @param password   Das Kennwordt des gegebenen Benutzers.
      */
-    public DerbyConnectionProvider(String dbFilePath, String user, String password) {
+    public DerbyConnectionProvider(String dbFilePath, String user, char[] password) {
         this.dbFilePath = dbFilePath;
         this.user = user;
         this.password = password;
@@ -48,7 +50,7 @@ class DerbyConnectionProvider implements DbConnectionProviderInterface, AutoClos
         EmbeddedDataSource dataSource = new EmbeddedDataSource();
         dataSource.setDatabaseName(String.format("%s;create=true", reformatFilePath(dbFilePath)));
         dataSource.setUser(user);
-        dataSource.setPassword(password);
+        dataSource.setPassword(StandardCharsets.UTF_8.encode(CharBuffer.wrap(password)).toString());
         return dataSource.getConnection();
     }
 
