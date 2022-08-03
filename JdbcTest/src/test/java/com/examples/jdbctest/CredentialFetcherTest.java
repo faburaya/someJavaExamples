@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import org.junit.AfterClass;
@@ -11,8 +12,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class CredentialFetcherTest {
-    private static final String TEST_CRED_FILE_PATH = "encrypted_credential_test";
-    private static final String TEST_SECRET_FILE_PATH = "encrypted_secret_test";
+    private static final Path TEST_CRED_FILE_PATH = Paths.get("encrypted_credential_test");
+    private static final Path TEST_SECRET_FILE_PATH = Paths.get("encrypted_secret_test");
 
     private static CredentialFetcherInterface createFetcherToProvide(String userId, char[] password) {
         return new CredentialFetcherInterface() {
@@ -26,8 +27,8 @@ public class CredentialFetcherTest {
     }
 
     public static void cleanUp() throws IOException {
-        Files.deleteIfExists(Paths.get(TEST_CRED_FILE_PATH));
-        Files.deleteIfExists(Paths.get(TEST_SECRET_FILE_PATH));
+        Files.deleteIfExists(TEST_CRED_FILE_PATH);
+        Files.deleteIfExists(TEST_SECRET_FILE_PATH);
     }
 
     @Before
@@ -54,10 +55,10 @@ public class CredentialFetcherTest {
         assertArrayEquals(expectedPassword, actualCredential.getPassword());
 
         assertTrue(String.format("File %s not present!", TEST_CRED_FILE_PATH),
-                Paths.get(TEST_CRED_FILE_PATH).toFile().exists());
+                TEST_CRED_FILE_PATH.toFile().exists());
 
         assertTrue(String.format("File %s not present!", TEST_SECRET_FILE_PATH),
-                Paths.get(TEST_SECRET_FILE_PATH).toFile().exists());
+                TEST_SECRET_FILE_PATH.toFile().exists());
 
         // nun holt die Anmeldeinfomationen aus dem Speicher:
         actualCredential = fetcher.getCredential();

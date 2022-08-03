@@ -10,7 +10,6 @@ import java.nio.CharBuffer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -52,10 +51,10 @@ class CredentialFetcher implements CredentialFetcherInterface {
      *                           Anmeldeinformationen, wenn sie aus dem Speicher
      *                           nicht abzurufen sind.
      */
-    public CredentialFetcher(String credentialFilePath, String secretFilePath,
+    public CredentialFetcher(Path credentialFilePath, Path secretFilePath,
             CredentialFetcherInterface fallbackFetcher) {
-        this.credentialFilePath = Paths.get(credentialFilePath);
-        this.secretFilePath = Paths.get(secretFilePath);
+        this.credentialFilePath = credentialFilePath;
+        this.secretFilePath = secretFilePath;
         this.fallbackFetcher = fallbackFetcher;
     }
 
@@ -143,7 +142,7 @@ class CredentialFetcher implements CredentialFetcherInterface {
             SecretKey secret = readSecret();
             return readCredentialFromFile(secret);
         } catch (Exception ex) {
-            logger.warning(ex.getMessage());
+            logger.warning(ex.toString());
         }
 
         Credential credential = fallbackFetcher.getCredential();
