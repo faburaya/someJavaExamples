@@ -2,7 +2,8 @@ package com.examples.jdbctest;
 
 import java.nio.CharBuffer;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Paths;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -23,7 +24,7 @@ class DerbyConnectionProvider implements DbConnectionProviderInterface, AutoClos
         logger = Logger.getLogger(DerbyConnectionProvider.class.getCanonicalName());
     }
 
-    private final String dbFilePath;
+    private final Path dbFilePath;
     private final String user;
     private final char[] password;
 
@@ -35,14 +36,14 @@ class DerbyConnectionProvider implements DbConnectionProviderInterface, AutoClos
      * @param user       Der Name des Benutzers der Datenbank.
      * @param password   Das Kennwordt des gegebenen Benutzers.
      */
-    public DerbyConnectionProvider(String dbFilePath, String user, char[] password) {
+    public DerbyConnectionProvider(Path dbFilePath, String user, char[] password) {
         this.dbFilePath = dbFilePath;
         this.user = user;
         this.password = password;
     }
 
-    private static String reformatFilePath(String dbFilePath) {
-        return Paths.get(dbFilePath).toAbsolutePath().toString().replace('\\', '/');
+    private static String reformatFilePath(Path dbFilePath) {
+        return dbFilePath.toAbsolutePath().toString().replace('\\', '/');
     }
 
     @Override
@@ -57,7 +58,9 @@ class DerbyConnectionProvider implements DbConnectionProviderInterface, AutoClos
     @Override
     public void close() {
         try {
-            DriverManager.getConnection(String.format("jdbc:derby:%s;shutdown=true", reformatFilePath(dbFilePath)));
+            if (Files.exists(dbFilePath)) {
+                DriverManager.getConnection(String.format("jdbc:derby:%s;shutdown=true", reformatFilePath(dbFilePath)));
+            }
         } catch (SQLException sqlex) {
             if (sqlex.getErrorCode() != 45000 && sqlex.getErrorCode() != 50000) {
                 logger.severe(sqlex.getMessage());

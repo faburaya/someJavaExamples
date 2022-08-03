@@ -14,7 +14,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class DerbyConnectionProviderTest {
-    private static final String DERBY_DATABASE_FILE_PATH = Paths.get("temp", "derby_database").toString();
+    private static final Path DERBY_DATABASE_FILE_PATH = Paths.get("temp", "derby_database");
     private static final String DERBY_DATABASE_USER = "Kerl";
     private static final char[] DERBY_DATABASE_PASSOWRD = "K3nnwort".toCharArray();
 
@@ -43,12 +43,12 @@ public class DerbyConnectionProviderTest {
 
     @Before
     public void setUp() throws IOException {
-        deletePath(Paths.get(DERBY_DATABASE_FILE_PATH));
+        deletePath(DERBY_DATABASE_FILE_PATH);
     }
 
     @AfterClass
     public static void tearDown() throws IOException {
-        deletePath(Paths.get(DERBY_DATABASE_FILE_PATH));
+        deletePath(DERBY_DATABASE_FILE_PATH);
     }
 
     @Test
