@@ -82,7 +82,7 @@ public class App {
         }
     }
 
-    private static final Path DATABASE_FILE_PATH = Paths.get("temp", "app_database");
+    private static final Path PROPS_FILE_PATH = Paths.get("jdbctest.properties");
     private static final Path CRED_FILE_PATH = Paths.get("temp", "credential.x");
     private static final Path SECRET_FILE_PATH = Paths.get("temp", "secret.x");
 
@@ -92,8 +92,10 @@ public class App {
                     new InteractiveCredentialFetcher());
 
             Credential credential = credentialFetcher.getCredential();
+            AppProperties properties = AppProperties.loadFrom(PROPS_FILE_PATH.toFile());
+            Path databaseFilePath = Paths.get(properties.getDatabaseSource()).toAbsolutePath();
 
-            try (DerbyConnectionProvider dbConnectionProvider = new DerbyConnectionProvider(DATABASE_FILE_PATH,
+            try (DerbyConnectionProvider dbConnectionProvider = new DerbyConnectionProvider(databaseFilePath,
                     credential.getUserId(),
                     credential.getPassword())) {
                 Connection dbConnection = dbConnectionProvider.getConnection();
