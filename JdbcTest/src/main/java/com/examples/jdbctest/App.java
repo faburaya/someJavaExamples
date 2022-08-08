@@ -25,7 +25,7 @@ public class App {
         DatabaseMetaData dbMetadata = dbConnection.getMetaData();
         try (ResultSet tables = dbMetadata.getTables(null, null, null, new String[] { "TABLE" })) {
             while (tables.next()) {
-                if (tables.getString("TABLE_NAME").equals(TABLE_NAME.toUpperCase())) {
+                if (tables.getString("TABLE_NAME").toUpperCase().equals(TABLE_NAME.toUpperCase())) {
                     return false;
                 }
             }
@@ -83,8 +83,26 @@ public class App {
     }
 
     private static final Path PROPS_FILE_PATH = Paths.get("jdbctest.properties");
-    private static final Path CRED_FILE_PATH = Paths.get("temp", "credential.x");
-    private static final Path SECRET_FILE_PATH = Paths.get("temp", "secret.x");
+    private static final Path CRED_FILE_PATH = Paths.get("credential.x");
+    private static final Path SECRET_FILE_PATH = Paths.get("secret.x");
+
+    private static DbConnectionProviderInterface getDatabaseConnectionProvider(AppProperties properties,
+            Credential credential) throws Exception {
+        Path databaseFilePath = Paths.get(properties.getDatabaseSource()).toAbsolutePath();
+        switch (properties.getDatabaseProvider().toLowerCase()) {
+            case "derby":
+                return new DerbyConnectionProvider(databaseFilePath,
+                        credential.getUserId(),
+                        credential.getPassword());
+
+            case "sqlite":
+                return new SqliteConnectionProvider(databaseFilePath.toFile().toPath());
+
+            default:
+                throw new Exception(String.format("Der Datenbankanbieter '%s' ist nicht anerkannt!",
+                        properties.getDatabaseProvider()));
+        }
+    }
 
     public static void main(String[] args) {
         try {
@@ -93,11 +111,9 @@ public class App {
 
             Credential credential = credentialFetcher.getCredential();
             AppProperties properties = AppProperties.loadFrom(PROPS_FILE_PATH.toFile());
-            Path databaseFilePath = Paths.get(properties.getDatabaseSource()).toAbsolutePath();
 
-            try (DerbyConnectionProvider dbConnectionProvider = new DerbyConnectionProvider(databaseFilePath,
-                    credential.getUserId(),
-                    credential.getPassword())) {
+            try (DbConnectionProviderInterface dbConnectionProvider = getDatabaseConnectionProvider(properties,
+                    credential)) {
                 Connection dbConnection = dbConnectionProvider.getConnection();
                 boolean schemaNotPresent = createSchemaIfNotPresent(dbConnection);
                 logger.config(String.format("Schema der Datenbank schon vorhanden? %b", !schemaNotPresent));

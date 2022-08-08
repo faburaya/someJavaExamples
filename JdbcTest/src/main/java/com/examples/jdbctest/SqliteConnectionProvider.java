@@ -1,6 +1,6 @@
 package com.examples.jdbctest;
 
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -16,20 +16,29 @@ class SqliteConnectionProvider implements DbConnectionProviderInterface {
     /**
      * Erstellt eine neue Instanz von <code>SqliteConnectionProvider</code>.
      * 
-     * @param dbPath Der Pfad zur Datei, welche die SQLite-Datenbank enthält,
-     *               oder ":memory:", falls sie im Arbeitsspeicher gespeichert
-     *               werden muss.
+     * @param dbPath Der Pfad zur Datei, welche die SQLite-Datenbank enthält.
      */
-    public SqliteConnectionProvider(String dbPath) {
-        if (dbPath != ":memory:") {
-            dbPath = Paths.get(dbPath).toAbsolutePath().toString().replace('\\', '/');
-        }
-        url = "jdbc:sqlite:" + dbPath;
+    public SqliteConnectionProvider(Path dbPath) {
+        String dbPathSuffix = dbPath.toAbsolutePath().toString().replace('\\', '/');
+        url = "jdbc:sqlite:" + dbPathSuffix;
+    }
+
+    /**
+     * Erstellt eine neue Instanz von <code>SqliteConnectionProvider</code>.
+     * 
+     * Der Datenbank wird im Arbeitsspeicher gespeichert.
+     */
+    public SqliteConnectionProvider() {
+        url = "jdbc:sqlite::memory:";
     }
 
     @Override
     public Connection getConnection() throws SQLException {
-
         return DriverManager.getConnection(url);
+    }
+
+    @Override
+    public void close() {
+        return; // no-op
     }
 }

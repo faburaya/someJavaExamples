@@ -17,7 +17,7 @@ import org.apache.derby.jdbc.EmbeddedDataSource;
  * 
  * @see DbConnectionProviderInterface
  */
-class DerbyConnectionProvider implements DbConnectionProviderInterface, AutoCloseable {
+class DerbyConnectionProvider implements DbConnectionProviderInterface {
     private static final Logger logger;
 
     static {

@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -22,7 +23,7 @@ public class SqliteConnectionProviderTest {
 
     @Test
     public void getConnection_and_use_it() throws SQLException {
-        String dbFilePath = getDatabaseFile().getAbsolutePath();
+        Path dbFilePath = getDatabaseFile().toPath();
         DbConnectionProviderInterface provider = new SqliteConnectionProvider(dbFilePath);
         try (Connection conn = provider.getConnection()) {
             assertNotNull(conn);

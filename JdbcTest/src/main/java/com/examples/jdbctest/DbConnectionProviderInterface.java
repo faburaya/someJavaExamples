@@ -6,7 +6,7 @@ import java.sql.SQLException;
 /**
  * Schnittstelle zur Einrichung einer Verbindung zur Datenbank.
  */
-public interface DbConnectionProviderInterface {
+public interface DbConnectionProviderInterface extends AutoCloseable {
     /**
      * Gewährt eine Verbindung zur Datenbank.
      * 
