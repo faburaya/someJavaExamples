@@ -18,7 +18,5 @@ public class AppPropertiesTest {
         AppProperties appProperties = AppProperties.loadFrom(getPropertiesFile());
         assertEquals("database_product", appProperties.getDatabaseProvider());
         assertEquals("the_source", appProperties.getDatabaseSource());
-        assertEquals("some_user", appProperties.getDatabaseUser());
-        assertEquals("her_password", appProperties.getDatabasePassword());
     }
 }

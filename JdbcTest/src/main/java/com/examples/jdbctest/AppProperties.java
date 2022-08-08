@@ -11,10 +11,6 @@ import java.util.Properties;
  * dieser Anwendung notwendig sind.
  */
 class AppProperties {
-    private static final String PROPKEY_DB_PASSWORD = "dbPassword";
-
-    private static final String PROPKEY_DB_USER = "dbUser";
-
     private static final String PROPKEY_DB_SOURCE = "dbSource";
 
     private static final String PROPKEY_DB_PROVIDER = "dbProvider";
@@ -31,24 +27,9 @@ class AppProperties {
         return databaseSource;
     }
 
-    private final String databaseUser;
-
-    public String getDatabaseUser() {
-        return databaseUser;
-    }
-
-    private final String databasePassword;
-
-    public String getDatabasePassword() {
-        return databasePassword;
-    }
-
-    private AppProperties(String databaseProvider, String databaseSource, String databaseUser,
-            String databasePassword) {
+    private AppProperties(String databaseProvider, String databaseSource) {
         this.databaseProvider = databaseProvider;
         this.databaseSource = databaseSource;
-        this.databaseUser = databaseUser;
-        this.databasePassword = databasePassword;
     }
 
     /**
@@ -66,9 +47,7 @@ class AppProperties {
             properties.load(inputStream);
             String databaseProvider = properties.getProperty(PROPKEY_DB_PROVIDER);
             String databaseSource = properties.getProperty(PROPKEY_DB_SOURCE);
-            String databaseUser = properties.getProperty(PROPKEY_DB_USER);
-            String databasePassword = properties.getProperty(PROPKEY_DB_PASSWORD);
-            return new AppProperties(databaseProvider, databaseSource, databaseUser, databasePassword);
+            return new AppProperties(databaseProvider, databaseSource);
         }
     }
 }
